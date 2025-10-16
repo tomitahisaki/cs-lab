@@ -1,0 +1,22 @@
+name: Weekly plan (manual)
+description: Plan this week (manual trigger)
+labels: ["weekly"]
+body:
+  - type: checkboxes
+    id: focus
+    attributes:
+      label: Focus (pick max 3)
+      options:
+        - label: CS topic
+        - label: Algorithms (2 problems)
+        - label: System design mini
+        - label: English summary (1 post)
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      value: |
+        - Read (OSTEP/Go Blog) — 1.5h
+        - Algorithms (AtCoder/LeetCode) — 1.5h
+        - Implementation (Go) — 3h
+        - English write-up — 1–2h

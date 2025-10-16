@@ -1,0 +1,16 @@
+name: Experiment
+description: PoC / lab experiment
+labels: ["bench"]
+body:
+  - type: input
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps
+  - type: textarea
+    id: result
+    attributes:
+      label: Result / Numbers

@@ -1,0 +1,19 @@
+name: Study task
+description: Track a study unit (CS/Go)
+labels: ["docs"]
+body:
+  - type: input
+    id: goal
+    attributes:
+      label: Goal (1–2 lines)
+  - type: textarea
+    id: plan
+    attributes:
+      label: Plan (3 bullets)
+  - type: checkboxes
+    id: done
+    attributes:
+      label: Done criteria
+      options:
+        - label: README updated
+        - label: minimal test added

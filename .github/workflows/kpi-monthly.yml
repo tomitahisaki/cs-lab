@@ -1,0 +1,42 @@
+name: kpi-monthly
+on:
+  schedule:
+    - cron: "0 1 1 * *" # monthly (UTC)
+  workflow_dispatch:
+jobs:
+  open-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const month = new Date().toISOString().slice(0,7);
+            const title = `Monthly KPI Check-in (${month})`;
+            const body = `
+## KPIs
+- [ ] English outputs: 4
+- [ ] CS topics (code + README): 4
+- [ ] LeetCode solved (Easy/Med): 8
+- [ ] System-design mini project: 1
+
+## Notes
+- Highlights:
+- What went well:
+- What to improve:
+`;
+            const {data: issues} = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open'
+            });
+            const exists = issues.find(i => i.title.includes(title));
+            if (!exists) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['kpi']
+              });
+            }

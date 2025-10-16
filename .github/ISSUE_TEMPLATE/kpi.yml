@@ -1,0 +1,17 @@
+name: KPI check-in (manual)
+description: Monthly KPI manual check-in
+labels: ["kpi"]
+body:
+  - type: checkboxes
+    id: kpis
+    attributes:
+      label: KPIs
+      options:
+        - label: English outputs: 4
+        - label: CS topics (code + README): 4
+        - label: LeetCode solved (Easy/Med): 8
+        - label: System-design mini project: 1
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes

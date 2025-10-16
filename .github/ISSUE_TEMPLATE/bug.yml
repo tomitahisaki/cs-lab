@@ -1,0 +1,12 @@
+name: Bug
+description: Something is broken
+labels: ["bug"]
+body:
+  - type: textarea
+    id: desc
+    attributes:
+      label: Description
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
