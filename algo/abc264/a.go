@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 	var l, r int
-	fmt.Scan(&l, &r)
+	_, _ = fmt.Scan(&l, &r)
 
 	const string = "atcoder"
 
