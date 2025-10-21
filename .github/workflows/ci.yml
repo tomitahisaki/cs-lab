@@ -32,6 +32,7 @@ jobs:
 
       # 各モジュール配下で lint 実行
       - name: Lint changed modules
+        run: |
           for m in ${{ steps.ch.outputs.changed }}; do
             echo "==> lint $m"
             # Goファイルが無ければスキップ
