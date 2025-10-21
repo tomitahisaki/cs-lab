@@ -11,14 +11,38 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.25'
+      - name: Workspace sync
+        run: go work sync
+
       - name: Install linters
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
           golangci-lint version
-      - name: Lint
-        run: golangci-lint run ./...
+
+      # check directory diff
+      - name: Detrect changed modules
+        id: ch
+        run: |
+          BASE=${{ github.base_ref || 'main' }}
+          CHANGED=$(git diff --name-only origin/$BASE...HEAD \
+            | cut -d/ -f1 | sort -u \
+            | grep -E '^(cs|lab|systems|algo|shared)$' || true)
+          if [ -z "$CHANGED" ]; then CHANGED="cs lab systems algo shared"; fi
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+      # 各モジュール配下で lint 実行
+      - name: Lint changed modules
+        run: |
+          for m in ${{ steps.ch.outputs.changed }}; do
+            echo "==> lint $m"
+            (cd "$m" && golangci-lint run ./...)
+          done
+
+      # 各モジュール配下でテスト実行（-race 付き）
       - name: Test changed modules
-        env:
-          BASE_REF: ${{ github.base_ref || 'main' }}
-        run: make test-changed
+        run: |
+          for m in ${{ steps.ch.outputs.changed }}; do
+            echo "==> test $m"
+            (cd "$m" && go test -race ./...)
+          done
