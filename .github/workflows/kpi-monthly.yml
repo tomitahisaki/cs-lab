@@ -1,42 +1,82 @@
-name: kpi-monthly
+
+name: KPI Monthly (auto)
 on:
   schedule:
-    - cron: "0 1 1 * *" # monthly (UTC)
+    - cron: "0 1 1 * *"   # 毎月1日 01:00 UTC = 10:00 JST
   workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   open-issue:
+    name: Open KPI issue
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/github-script@v7
+      # （任意）ラベルが無い場合は自動作成
+      - name: Ensure label exists
+        uses: actions/github-script@v7
         with:
           script: |
-            const month = new Date().toISOString().slice(0,7);
-            const title = `Monthly KPI Check-in (${month})`;
-            const body = `
-## KPIs
-- [ ] English outputs: 4
-- [ ] CS topics (code + README): 4
-- [ ] LeetCode solved (Easy/Med): 8
-- [ ] System-design mini project: 1
+            const NAME = "kpi";
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: NAME
+              });
+            } catch {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: NAME,
+                color: "5319e7"
+              });
+            }
 
-## Notes
-- Highlights:
-- What went well:
-- What to improve:
-`;
-            const {data: issues} = await github.rest.issues.listForRepo({
+      - name: Open KPI issue (JST month)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // JSTの今月(YYYY-MM)を作る
+            function jstNow() { return new Date(Date.now() + 9*60*60*1000); }
+            const month = jstNow().toISOString().slice(0, 7);
+            const title = `Monthly KPI Check-in (${month})`;
+
+            const body = [
+              "## KPIs",
+              "- [ ] English outputs: 4",
+              "- [ ] CS topics (code + README): 4",
+              "- [ ] LeetCode solved (Easy/Med): 8",
+              "- [ ] System-design mini project: 1",
+              "",
+              "## Notes",
+              "- Highlights:",
+              "- What went well:",
+              "- What to improve:",
+              ""
+            ].join("\n");
+
+            // 既存の同名Issueが開いていれば作らない（完全一致・最大100件）
+            const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              state: 'open'
+              state: "open",
+              per_page: 100
             });
-            const exists = issues.find(i => i.title.includes(title));
+            const exists = issues.some(i => i.title === title);
+
             if (!exists) {
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title,
                 body,
-                labels: ['kpi']
+                labels: ["kpi"]
               });
+              core.info(`Created: ${title}`);
+            } else {
+              core.info(`Already exists: ${title}`);
             }
+
