@@ -1,7 +1,8 @@
+
 name: Weekly Plan (auto)
 on:
   schedule:
-    - cron: '0 1 * * 1'   # 月曜 10:00 JST（= 01:00 UTC）
+    - cron: "0 1 * * 1"   # Mon 01:00 UTC = Mon 10:00 JST
   workflow_dispatch:
 
 permissions:
@@ -13,64 +14,57 @@ jobs:
     name: Open weekly plan issue
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Ensure label exists
-        uses: actions/github-script@v7
+      - uses: actions/github-script@v7
         with:
           script: |
-            const LABEL = { name: 'weekly', color: '0052cc' };
-            try {
-              await github.rest.issues.getLabel({
-                owner: context.repo.owner, repo: context.repo.repo, name: LABEL.name
-              });
-            } catch {
-              await github.rest.issues.createLabel({
-                owner: context.repo.owner, repo: context.repo.repo,
-                name: LABEL.name, color: LABEL.color
-              });
-            }
-
-      - name: Open issue (JST week)
-        uses: actions/github-script@v7
-        with:
-          script: |
-            // JST 月曜〜日曜の範囲を作る
-            function jstNow(){ return new Date(Date.now() + 9*60*60*1000); }
+            // Compute JST week [Mon..Sun]
+            function jstNow() { return new Date(Date.now() + 9*60*60*1000); }
             function jstWeekRange() {
               const d = jstNow();
-              const wd = d.getUTCDay(); // 0:Sun..6:Sat（JST補正後）
+              const wd = d.getUTCDay(); // 0..6 (Sun..Sat)
               const diff = d.getUTCDate() - wd + (wd === 0 ? -6 : 1);
               const mon = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff));
-              const sun = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff+6));
-              const iso = x => x.toISOString().slice(0,10);
-              return [iso(mon), iso(sun)];
+              const sun = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff + 6));
+              const fmt = x => x.toISOString().slice(0, 10);
+              return [fmt(mon), fmt(sun)];
             }
-            const [from,to] = jstWeekRange();
-            const title = `This Week Plan (${from}–${to})`;
-            const body = `## Focus (pick max 3)
-- [ ] CS topic
-- [ ] Algorithms (2 problems)
-- [ ] System design mini
-- [ ] English summary (1 post)
+            const [from, to] = jstWeekRange();
+            const title = `This Week Plan (${from}-${to})`;
+            const body = [
+              "## Focus (pick max 3)",
+              "- [ ] CS topic",
+              "- [ ] Algorithms (2 problems)",
+              "- [ ] System design mini",
+              "- [ ] English summary (1 post)",
+              "",
+              "## Tasks",
+              "- [ ] Read (OSTEP/Go Blog) - 1.5h",
+              "- [ ] Algorithms (AtCoder/LeetCode) - 1.5h",
+              "- [ ] Implementation (Go) - 3h",
+              "- [ ] English write-up - 1-2h",
+              "",
+              "## Notes",
+              ""
+            ].join("\n");
 
-## Tasks
-- [ ] Read (OSTEP/Go Blog) — 1.5h
-- [ ] Algorithms (AtCoder/LeetCode) — 1.5h
-- [ ] Implementation (Go) — 3h
-- [ ] English write-up — 1–2h
-
-## Notes
-`;
+            // Create only if not exists (exact match)
             const { data: issues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner, repo: context.repo.repo,
-              state: 'open', per_page: 100
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 100
             });
             const exists = issues.some(i => i.title === title);
             if (!exists) {
               await github.rest.issues.create({
-                owner: context.repo.owner, repo: context.repo.repo,
-                title, body, labels: ['weekly']
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["weekly"]
               });
+              core.info(`Created: ${title}`);
+            } else {
+              core.info(`Already exists: ${title}`);
             }
 
