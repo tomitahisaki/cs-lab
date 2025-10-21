@@ -1,10 +1,13 @@
 ## What
+
 - ...
 
 ## Why (Design / Trade-offs)
+
 - ...
 
 ## How to run
+
 ```bash
 make test
 # or module-level
@@ -12,4 +15,5 @@ make test
 ```
 
 ## Result
+
 - Benchmark / Screenshot / Logs
