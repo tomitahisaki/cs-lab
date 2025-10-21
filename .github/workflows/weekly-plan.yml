@@ -1,3 +1,4 @@
+
 name: Weekly Plan (auto)
 on:
   schedule:
@@ -13,22 +14,64 @@ jobs:
     name: Open weekly plan issue
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v7
+      - uses: actions/checkout@v4
+
+      - name: Ensure label exists
+        uses: actions/github-script@v7
         with:
           script: |
-            const title = 'This Week Plan (placeholder)';
-            const body = 'Auto-created weekly placeholder.';
+            const LABEL = { name: 'weekly', color: '0052cc' };
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner, repo: context.repo.repo, name: LABEL.name
+              });
+            } catch {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner, repo: context.repo.repo,
+                name: LABEL.name, color: LABEL.color
+              });
+            }
+
+      - name: Open issue (JST week)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // JST 月曜〜日曜の範囲を作る
+            function jstNow(){ return new Date(Date.now() + 9*60*60*1000); }
+            function jstWeekRange() {
+              const d = jstNow();
+              const wd = d.getUTCDay(); // 0:Sun..6:Sat（JST補正後）
+              const diff = d.getUTCDate() - wd + (wd === 0 ? -6 : 1);
+              const mon = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff));
+              const sun = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff+6));
+              const iso = x => x.toISOString().slice(0,10);
+              return [iso(mon), iso(sun)];
+            }
+            const [from,to] = jstWeekRange();
+            const title = `This Week Plan (${from}–${to})`;
+            const body = `## Focus (pick max 3)
+- [ ] CS topic
+- [ ] Algorithms (2 problems)
+- [ ] System design mini
+- [ ] English summary (1 post)
+
+## Tasks
+- [ ] Read (OSTEP/Go Blog) — 1.5h
+- [ ] Algorithms (AtCoder/LeetCode) — 1.5h
+- [ ] Implementation (Go) — 3h
+- [ ] English write-up — 1–2h
+
+## Notes
+`;
             const { data: issues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              per_page: 100
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', per_page: 100
             });
-            if (!issues.some(i => i.title === title)) {
+            const exists = issues.some(i => i.title === title);
+            if (!exists) {
               await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title, body
+                owner: context.repo.owner, repo: context.repo.repo,
+                title, body, labels: ['weekly']
               });
             }
 
