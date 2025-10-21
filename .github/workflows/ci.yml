@@ -1,6 +1,5 @@
 name: ci
 on:
-  push:
   pull_request:
 jobs:
   go:
@@ -33,9 +32,12 @@ jobs:
 
       # 各モジュール配下で lint 実行
       - name: Lint changed modules
-        run: |
           for m in ${{ steps.ch.outputs.changed }}; do
             echo "==> lint $m"
+            # Goファイルが無ければスキップ
+            if ! find "$m" -type f -name '*.go' | grep -q .; then
+              echo "skip $m (no go files)"; continue
+            fi
             (cd "$m" && golangci-lint run ./...)
           done
 
@@ -44,5 +46,9 @@ jobs:
         run: |
           for m in ${{ steps.ch.outputs.changed }}; do
             echo "==> test $m"
+            # Goファイルが無ければスキップ（テストも不要）
+            if ! find "$m" -type f -name '*.go' | grep -q .; then
+              echo "skip $m (no go files)"; continue
+            fi
             (cd "$m" && go test -race ./...)
           done
