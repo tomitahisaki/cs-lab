@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 	var s, t, x int
-	fmt.Scan(&s, &t, &x)
+	fmt.Scan(&s, &t, &x) // nolint:errcheck
 
 	if s < t {
 		if s <= x && x < t {
