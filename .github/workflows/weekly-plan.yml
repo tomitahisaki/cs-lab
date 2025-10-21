@@ -1,52 +1,34 @@
-name: weekly-plan
+name: Weekly Plan (auto)
 on:
   schedule:
-    - cron: "0 1 * * 1" # every Monday (UTC)
+    - cron: '0 1 * * 1'   # 月曜 10:00 JST（= 01:00 UTC）
   workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   open-issue:
+    name: Open weekly plan issue
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/github-script@v7
         with:
           script: |
-            function weekRange(d=new Date()) {
-              const day = d.getUTCDay();
-              const diff = d.getUTCDate() - day + (day==0?-6:1); // Monday as first
-              const monday = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff));
-              const sunday = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff+6));
-              return [monday.toISOString().slice(0,10), sunday.toISOString().slice(0,10)];
-            }
-            const [from,to] = weekRange();
-            const title = `This Week Plan (${from}–${to})`;
-            const body = `
-## Focus (pick max 3)
-- [ ] CS topic
-- [ ] Algorithms (2 problems)
-- [ ] System design mini
-- [ ] English summary (1 post)
-
-## Tasks
-- [ ] Read (OSTEP/Go Blog) — 1.5h
-- [ ] Algorithms (AtCoder/LeetCode) — 1.5h
-- [ ] Implementation (Go) — 3h
-- [ ] English write-up — 1–2h
-
-## Notes
-`;
-            const {data: issues} = await github.rest.issues.listForRepo({
+            const title = 'This Week Plan (placeholder)';
+            const body = 'Auto-created weekly placeholder.';
+            const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              state: 'open'
+              state: 'open',
+              per_page: 100
             });
-            const exists = issues.find(i => i.title.includes(title));
-            if (!exists) {
+            if (!issues.some(i => i.title === title)) {
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                title,
-                body,
-                labels: ['weekly']
+                title, body
               });
             }
+
