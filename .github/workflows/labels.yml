@@ -1,20 +1,49 @@
-name: sync-labels
+name: Sync Labels
+
 on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "dry-run"
+        required: false
+        type: boolean
+        default: false
+      allow-added-labels:
+        description: "Not remove existing labels"
+        required: false
+        type: boolean
+        default: true
   push:
     branches: [ main ]
     paths:
-      - '.github/labels.yml'
-  workflow_dispatch:
+      - ".github/labels.json"
+      - ".github/workflows/sync-labels.yml"
 
 permissions:
   contents: read
   issues: write
 
 jobs:
-  sync:
+  sync-labels:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: micnncim/action-label-syncer@v1
+
+      - uses: actions/setup-node@v4
         with:
-          manifest: .github/labels.yml
+          node-version: "lts/*"
+
+      - name: Install github-label-setup
+        run: npm i -D @azu/github-label-setup
+      - name: Run github-label-setup
+        run: |
+          CMD="npx github-label-setup --token ${{ secrets.GITHUB_TOKEN }} --labels .github/labels.json"
+          if [[ "${{ inputs.dry-run }}" == "true" ]]; then
+            CMD="$CMD --dry-run"
+          fi
+          if [[ "${{ inputs.allow-added-labels }}" == "true" ]]; then
+            CMD="$CMD --allow-added-labels"
+          fi
+          echo "$CMD"
+          eval "$CMD"
+
