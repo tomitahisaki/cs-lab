@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       dry-run:
-        description: "This is dry-run. it does not change label"
+        description: "dry-run"
         required: false
         type: boolean
         default: false
       allow-added-labels:
-        description: "does not remove existing labels"
+        description: "Not remove existing labels"
         required: false
         type: boolean
         default: true
