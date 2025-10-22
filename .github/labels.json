@@ -1,0 +1,14 @@
+[
+  { "name": "cs", "color": "0e8a16", "description": "Computer science topics" },
+  { "name": "algo", "color": "1d76db", "description": "Algorithm-related issues" },
+  { "name": "design", "color": "fbca04", "description": "UI/UX and system design" },
+  { "name": "net", "color": "b60205", "description": "Network and communication topics" },
+  { "name": "db", "color": "5319e7", "description": "Database design or queries" },
+  { "name": "concurrency", "color": "5319e7", "description": "Parallel or concurrent processing" },
+  { "name": "docs", "color": "d4c5f9", "description": "Documentation and writing" },
+  { "name": "bench", "color": "c2e0c6", "description": "Performance or benchmark tests" },
+  { "name": "weekly", "color": "0052cc", "description": "Weekly updates or tasks" },
+  { "name": "kpi", "color": "5319e7", "description": "KPI tracking and progress" },
+  { "name": "good first issue", "color": "7057ff", "description": "Good for first-time contributors" }
+]
+
