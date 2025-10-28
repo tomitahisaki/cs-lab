@@ -1,4 +1,3 @@
-
 name: Weekly Plan (auto)
 on:
   schedule:
@@ -19,16 +18,31 @@ jobs:
           script: |
             // Compute JST week [Mon..Sun]
             function jstNow() { return new Date(Date.now() + 9*60*60*1000); }
-            function jstWeekRange() {
-              const d = jstNow();
-              const wd = d.getUTCDay(); // 0..6 (Sun..Sat)
-              const diff = d.getUTCDate() - wd + (wd === 0 ? -6 : 1);
-              const mon = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff));
-              const sun = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff + 6));
-              const fmt = x => x.toISOString().slice(0, 10);
+
+            function weekRangeFromDateJST(baseDate) {
+              // baseDate は「JST相当のUTC値」を持つ Date
+              const d = new Date(baseDate.getTime());
+              const wd = d.getUTCDay(); // 0..6 (Sun..Sat) ← JST を UTC フィールドで表現しているのでOK
+              const mondayDiff = d.getUTCDate() - wd + (wd === 0 ? -6 : 1);
+              const mon = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), mondayDiff));
+              const sun = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), mondayDiff + 6));
+              const fmt = x => x.toISOString().slice(0, 10); // "YYYY-MM-DD" (UTC表記だが日付はJSTの暦と一致)
               return [fmt(mon), fmt(sun)];
             }
-            const [from, to] = jstWeekRange();
+
+            // define base day if work on sunday, this issue for next week
+            function nextWeekBaseIfSundayJST() {
+              const now = jstNow();
+              if (now.getUTCDay() === 0) { // Sunday in JST
+                const nextDay = new Date(now.getTime());
+                nextDay.setUTCDate(nextDay.getUTCDate() + 1); // 月曜に進める
+                return nextDay;
+              }
+              return now; // それ以外は今週
+            }
+
+            const base = nextWeekBaseIfSundayJST();
+            const [from, to] = weekRangeFromDateJST(base);
             const title = `This Week Plan (${from}-${to})`;
             const body = [
               "## Focus (pick max 3)",
