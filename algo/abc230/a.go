@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 	var n int
-	fmt.Scan(&n)
+	fmt.Scan(&n) // nolint:errcheck
 
 	const title = "AGC"
 	if n < 42 {

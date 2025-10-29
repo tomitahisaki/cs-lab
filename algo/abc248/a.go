@@ -7,7 +7,7 @@ import (
 
 func main() {
 	var s string
-	fmt.Scan(&s)
+	fmt.Scan(&s) // nolint:errcheck
 
 	const numbers = "0123456789"
 
