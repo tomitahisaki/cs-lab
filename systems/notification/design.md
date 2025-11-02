@@ -2,9 +2,11 @@
 
 ## 1. Problem Statement
 
-Build a small, extensible notification system that can send outbound messages reliable through pluggable intefaces.
+Build a small, extensible notification system that can send outbound messages reliable
+through pluggable intefaces.
 
-The MVP will focus on Slack as the initial channel, with a design that allows easy addition of other channels (e.g., LINE, Email) in the future.
+The MVP will focus on Slack as the initial channel, with a design that allows
+easy addition of other channels (e.g., LINE, Email) in the future.
 
 ## 2. Requirements
 
@@ -40,7 +42,8 @@ flowchart LR
   ^
   |
 [infra/queue]        — InMemoryQueue (depends on domain types)
-[infra/slack]        — Slack Notifier (implements domain.Notifier) --> external: slack-go/slack
+[infra/slack]        — Slack Notifier (implements domain.Notifier) 
+                       --> external: slack-go/slack
 ```
 
 Rules
