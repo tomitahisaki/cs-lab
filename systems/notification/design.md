@@ -29,7 +29,7 @@ flowchart LR
   S --> SlackAPI[(Slack API)]
 ```
 
-```
+```text
 [cmd]                — Entry point (main)
    |
    v
