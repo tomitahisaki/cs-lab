@@ -7,7 +7,7 @@ import (
 
 func main() {
 	var n, m int
-	fmt.Scan(&n, &m)
+	fmt.Scan(&n, &m)                 // nolint:errcheck
 	const maximumNumber = 1000000000 // 10^9
 
 	result := 0.0
