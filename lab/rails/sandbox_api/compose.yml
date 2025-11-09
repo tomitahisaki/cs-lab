@@ -35,6 +35,8 @@ services:
       - "3000:3000"
     # 初回は bundle install → 以降はそのまま起動
     command: bash -lc "bundle config set path 'vendor/bundle' && bundle install && bin/rails s -b 0.0.0.0"
+    stdin_open: true
+    tty: true
 
 volumes:
   mysqldata:
