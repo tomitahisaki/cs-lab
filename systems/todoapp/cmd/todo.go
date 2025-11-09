@@ -18,7 +18,11 @@ func main() {
 	}
 
 	// wire: infra -> usecase
-	repo := infra.NewMemoryTaskRepo()
+	repo, err := infra.NewFileTaskRepo("./db/tasks.json")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "repo init error:", err)
+		os.Exit(1)
+	}
 	uc := usecase.NewTaskUsecase(repo)
 
 	switch os.Args[1] {
