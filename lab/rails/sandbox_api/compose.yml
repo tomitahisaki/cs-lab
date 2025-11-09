@@ -26,12 +26,7 @@ services:
     volumes:
       - .:/app
     environment:
-      RAILS_ENV: development
-      DB_HOST: db
-      DB_USER: root
-      DB_PASSWORD: password
-      DB_NAME: sandbox_api_development
-      REDIS_URL: redis://redis:6379/0
+      env_file: .env
       TZ: Asia/Tokyo
     depends_on:
       - db
