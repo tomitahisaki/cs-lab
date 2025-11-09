@@ -1,0 +1,61 @@
+# === Ruby / Rails ===
+*.rbc
+*.sassc
+/.bundle
+/vendor/bundle
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/public/assets
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+.byebug_history
+*.swp
+
+# === Rails credentials / secrets ===
+/config/master.key
+/config/credentials.yml.enc
+
+# === Environment & dotenv ===
+.env
+.env.*
+
+# === Coverage / testing ===
+/coverage
+/spec/examples.txt
+
+# === Uploaded files / ActiveStorage ===
+/storage/*
+!/storage/.keep
+
+# === Docker ===
+/vendor/bundle
+/docker-compose.override.yml
+*.pid
+*.pid.lock
+*.log
+*.pid
+*.sock
+*.pid.lock
+tmp/pids/*
+tmp/cache/*
+tmp/sockets/*
+!tmp/.keep
+
+# === IDE / OS ===
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# === Bundler audit config ===
+/config/bundler-audit.yml
+
+# === Others ===
+/.bundle
+/vendor/cache
