@@ -13,7 +13,7 @@ bench:
 	go test -bench=. -benchmem ./...
 
 tidy:
-	for m in cs lab systems algo shared; do (cd $$m && go mod tidy); done
+	for m in cs algo; do (cd $$m && go mod tidy); done
 
 test-changed:
 	@if [ -z "$(CHANGED)" ]; then echo "no changes in modules"; exit 0; fi; \

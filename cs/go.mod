@@ -1,3 +1,3 @@
-module github.com/USERNAME/cs-lab/cs
+module github.com/tomitahisaki/cs-lab/cs
 
 go 1.25

@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/tomitahisaki/cs-lab/systems/todoapp/internal/domain"
+	"github.com/tomitahisaki/cs-lab/cs/todoapp/internal/domain"
 )
 
 // コンパイル時に TaskRepository を実装していることを保証

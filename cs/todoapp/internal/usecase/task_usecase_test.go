@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/tomitahisaki/cs-lab/systems/todoapp/internal/domain"
-	"github.com/tomitahisaki/cs-lab/systems/todoapp/internal/infra"
+	"github.com/tomitahisaki/cs-lab/cs/todoapp/internal/domain"
+	"github.com/tomitahisaki/cs-lab/cs/todoapp/internal/infra"
 )
 
 func TestTaskUsecase_AddListDone(t *testing.T) {

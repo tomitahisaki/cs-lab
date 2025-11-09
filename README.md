@@ -5,11 +5,7 @@ Learning-first monorepo for CS × Go × Algorithms × System Design.
 ## Structure
 
 - `cs/` — CS experiments (concurrency, network, database)
-- `lab/` — distributed/messaging/cache experiments
-- `systems/` — small systems (url-shortener, job-queue, chat)
 - `algo/` — AtCoder/LeetCode + data structures
-- `shared/` — shared utilities
-- `docs/` — ADRs, weekly notes, templates
 
 ## Quick start
 
