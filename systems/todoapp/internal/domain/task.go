@@ -1,6 +1,10 @@
 // Package domain contains the core business entities of the todo application.
 package domain
 
+import "errors"
+
+var ErrNotFound = errors.New("task not found")
+
 // Task is a struct that represents a to-do task. it is core entity in the todo application.
 type Task struct {
 	ID    int    `json:"id"`

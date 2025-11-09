@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/USERNAME/cs-lab/systems/todoapp/internal/domain"
+	"github.com/tomitahisaki/cs-lab/systems/todoapp/internal/domain"
 )
 
 func TestTask_JSONRoundTrip(t *testing.T) {

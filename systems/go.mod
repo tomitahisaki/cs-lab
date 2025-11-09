@@ -1,3 +1,3 @@
-module github.com/USERNAME/cs-lab/systems
+module github.com/tomitahisaki/cs-lab/systems
 
 go 1.25
