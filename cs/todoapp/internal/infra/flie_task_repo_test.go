@@ -1,4 +1,4 @@
-// systems/todoapp/internal/infra/file_task_repo_test.go
+// todoapp/internal/infra/file_task_repo_test.go
 package infra
 
 import (
@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/tomitahisaki/cs-lab/systems/todoapp/internal/domain"
+	"github.com/tomitahisaki/cs-lab/cs/todoapp/internal/domain"
 )
 
 func TestFileTaskRepo_PersistRoundtrip(t *testing.T) {

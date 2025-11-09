@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tomitahisaki/cs-lab/systems/todoapp/internal/infra"
-	"github.com/tomitahisaki/cs-lab/systems/todoapp/internal/usecase"
+	"github.com/tomitahisaki/cs-lab/cs/todoapp/internal/infra"
+	"github.com/tomitahisaki/cs-lab/cs/todoapp/internal/usecase"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 	}
 
 	// wire: infra -> usecase
-	repo, err := infra.NewFileTaskRepo("./db/tasks.json")
+	repo, err := infra.NewFileTaskRepo("./todoapp/db/tasks.json")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "repo init error:", err)
 		os.Exit(1)

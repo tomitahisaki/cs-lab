@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/tomitahisaki/cs-lab/systems/todoapp/internal/domain"
+	"github.com/tomitahisaki/cs-lab/cs/todoapp/internal/domain"
 )
 
 type TaskUsecase struct {
