@@ -1,0 +1,45 @@
+name: sandbox_api
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: sandbox_api_development
+    command:
+      --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      RAILS_ENV: development
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: sandbox_api_development
+      REDIS_URL: redis://redis:6379/0
+      TZ: Asia/Tokyo
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "3000:3000"
+    # 初回は bundle install → 以降はそのまま起動
+    command: bash -lc "bundle config set path 'vendor/bundle' && bundle install && bin/rails s -b 0.0.0.0"
+
+volumes:
+  mysqldata:
