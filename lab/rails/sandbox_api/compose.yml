@@ -24,9 +24,9 @@ services:
       dockerfile: Dockerfile
     working_dir: /app
     volumes:
-      - .:/app
+      - .:/app:cached
+    env_file: .env
     environment:
-      env_file: .env
       TZ: Asia/Tokyo
     depends_on:
       - db
@@ -44,13 +44,12 @@ services:
       dockerfile: Dockerfile
     working_dir: /app
     volumes:
-      - .:/app
-    environment:
-      env_file: .env
+      - .:/app:cached
+    env_file: .env
     depends_on:
       - db
       - redis
-    command: bash -lc "bundle exec sidekiq -C config/sidekiq.yml"
+    command: bash -lc "bundle exec sidekiq ./config/environment -C config/sidekiq.yml"
 
 volumes:
   mysqldata:
