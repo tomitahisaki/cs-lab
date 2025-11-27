@@ -1,9 +1,9 @@
 
 name: KPI Monthly (auto)
 on:
-  schedule:
-    - cron: "0 1 1 * *"   # 毎月1日 01:00 UTC = 10:00 JST
-  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 1 1 * *"   # 毎月1日 01:00 UTC = 10:00 JST
+  # workflow_dispatch:
 
 permissions:
   contents: read

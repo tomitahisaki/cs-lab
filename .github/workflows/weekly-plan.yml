@@ -1,9 +1,9 @@
 name: Weekly Plan (auto)
 on:
-  schedule:
-    - cron: "0 1 * * 0"   # Sun 01:00 UTC = Sun 10:00 JST
-  workflow_dispatch:
-
+  # schedule:
+  #   - cron: "0 1 * * 0"   # Sun 01:00 UTC = Sun 10:00 JST
+  # workflow_dispatch:
+  #
 permissions:
   contents: read
   issues: write
