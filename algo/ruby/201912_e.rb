@@ -34,16 +34,10 @@ end
   array = gets.chomp.split.map(&:to_i)
   if array[0] == 1
     follow(follows_map, array[1], array[2])
-    puts(follows_map.map { |row| row.join })
-    puts 'follow==========================='
   elsif array[0] == 2
     follow_all(follows_map, array[1])
-    puts(follows_map.map { |row| row.join })
-    puts 'follow_all==========================='
   else
     follow_follow(follows_map, array[1])
-    puts(follows_map.map { |row| row.join })
-    puts 'follow_follow==========================='
   end
 end
 
