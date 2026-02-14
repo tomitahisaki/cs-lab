@@ -23,5 +23,3 @@ def generate(num_rows)
   result
 end
 
-p generate(5)
-
