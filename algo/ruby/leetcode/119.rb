@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-# @param {Integer} num_rows
-# @return {Integer[][]}
-def generate(num_rows)
+# @param {Integer} row_index
+# @return {Integer[]}
+def get_row(row_index)
   result = []
-  return result if num_rows == 0
-
   result << [1]
 
-  (1...num_rows).each do |i|
+  # row_index is 0-based, so we need to generate rows up to row_index
+  (1...row_index+1).each do |i|
     prev_row = result[i - 1]
     row = [1]
 
@@ -20,6 +19,7 @@ def generate(num_rows)
     result << row
   end
 
-  result
+  result[row_index]
 end
 
+p get_row(3) # [1, 3, 3, 1]
